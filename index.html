@@ -11,45 +11,38 @@
   <!-- Ethers.js -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <style>
-    /* Make html and body fill the viewport */
-    html, body {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
+    body {
       font-family: 'Inter', sans-serif;
       background-color: #1a202c;
       color: #e2e8f0;
-      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      overflow-x: hidden;
     }
 
-    /* Full screen container */
-    body > .game-container {
+    .game-container {
+      background-color: #2d3748;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 720px;
+      text-align: center;
+      border: 1px solid #4a5568;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* spread out vertically */
-      align-items: center;
-      width: 100vw;
-      height: 100vh;
-      padding: 1rem 1rem 2rem 1rem; /* some padding */
-      box-sizing: border-box;
-      background-color: #2d3748;
-      border-radius: 0; /* remove rounding so edges fill */
-      border: none; /* remove border for full bleed */
-      box-shadow: none;
-      max-width: none; /* allow full width */
-      text-align: center;
       gap: 1rem;
     }
 
-    /* Keep coin container smaller but responsive */
     .coin-container {
       width: 100px;
       height: 100px;
-      margin: 1rem auto;
+      margin: 2rem auto;
       perspective: 1000px;
       flex-shrink: 0;
     }
@@ -118,7 +111,6 @@
       user-select: none;
       width: 100%;
       box-sizing: border-box;
-      max-width: 320px;
     }
 
     .btn-primary {
@@ -150,7 +142,6 @@
       width: 100%;
       box-sizing: border-box;
       user-select: none;
-      max-width: 320px;
     }
 
     .btn-disconnect:hover {
@@ -175,7 +166,6 @@
       box-sizing: border-box;
       font-size: 1rem;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      max-width: 320px;
     }
 
     .input-field:focus {
@@ -193,9 +183,6 @@
       transform: translateY(10px);
       transition: opacity 0.3s ease-out, transform 0.3s ease-out;
       word-wrap: break-word;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .message-box.show {
@@ -223,7 +210,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       padding: 0.25rem 0;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -236,9 +223,10 @@
     }
 
     .wallet-buttons, .wallet-display {
-      flex: 0 1 auto;
-      min-width: 100px;
+      flex: 1 1 auto;
+      min-width: 120px;
       white-space: nowrap;
+      margin-bottom: 0.25rem;
     }
 
     .wallet-display {
@@ -267,37 +255,16 @@
       white-space: nowrap;
     }
 
-    .bet-guess-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-      width: 100%;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 1.5rem;
-    }
-
-    .bet-guess-item {
-      flex-grow: 1;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-      max-width: 320px;
-    }
-
-    #result-display {
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
     @media (max-width: 768px) {
+      .game-container {
+        max-width: 95vw;
+        padding: 2rem 1.5rem;
+      }
+
       .coin-container {
         width: 90px;
         height: 90px;
-        margin: 1rem auto;
+        margin: 1.5rem auto;
       }
 
       .coin-face {
@@ -305,20 +272,14 @@
         border-width: 4px;
       }
 
-      .btn, .btn-disconnect {
-        max-width: 100%;
+      .btn {
+        font-size: 1rem;
+        padding: 0.65rem 1.25rem;
       }
 
       .input-field {
-        max-width: 100%;
-      }
-
-      .bet-guess-container {
-        max-width: 100%;
-      }
-
-      .wallet-info-container {
-        max-width: 100%;
+        font-size: 1rem;
+        padding: 0.65rem;
       }
     }
 
@@ -334,8 +295,22 @@
         border-width: 3px;
       }
 
+      .btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+      }
+
+      .input-field {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
+
       h1.text-3xl {
         font-size: 1.75rem;
+      }
+
+      .wallet-buttons, .wallet-display {
+        min-width: 100px;
       }
     }
   </style>
