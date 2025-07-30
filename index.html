@@ -205,7 +205,7 @@
       color: #fff;
     }
 
-    /* UPDATED: Wallet info container forced in one horizontal line with horizontal scroll on small devices */
+    /* Wallet info container forced in one horizontal line with horizontal scroll on small devices */
     .wallet-info-container {
       display: flex;
       align-items: center;
@@ -215,18 +215,19 @@
       padding: 0.25rem 0;
       overflow-x: auto;         /* Enable horizontal scroll if needed */
       -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+      font-size: 0.75rem; /* DECREASED font size for entire container */
     }
 
     .wallet-buttons, .wallet-display {
       flex: 0 1 auto;           /* Allow shrinking but keep content size */
-      min-width: 120px;         /* Prevent them from getting too narrow */
+      min-width: 100px;         /* Slightly smaller min width */
       white-space: nowrap;      /* Prevent text wrap inside */
     }
 
     .wallet-display {
       background-color: #4a5568;
       border-radius: 0.75rem;
-      padding: 0.5rem 0.75rem;
+      padding: 0.4rem 0.6rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -234,18 +235,18 @@
     }
 
     .wallet-display span.text-lg.font-semibold {
-      font-size: 0.875rem;
+      font-size: 0.75rem; /* smaller */
     }
 
     .wallet-display span#connected-account,
     .wallet-display span#wallet-balance {
-      font-size: 0.9rem;
+      font-size: 0.8rem; /* smaller */
       white-space: nowrap;      /* Prevent breaking addresses or balances */
     }
 
     .wallet-buttons button {
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.75rem;
       white-space: nowrap;
     }
 
