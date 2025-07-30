@@ -79,18 +79,18 @@
       align-items: center;
       font-size: 3rem;
       font-weight: bold;
-      color: #fff;
+      color: white;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-      border: 5px solid #ffd700;
+      border: 5px solid #8b5cf6;
     }
 
     .coin-face.front {
-      background-color: #ffcc00;
+      background-color: #7c3aed; /* Purple */
       transform: rotateY(0deg);
     }
 
     .coin-face.back {
-      background-color: #c0c0c0;
+      background-color: #a78bfa; /* Lighter purple */
       transform: rotateY(180deg);
     }
 
@@ -255,8 +255,6 @@
       white-space: nowrap;
     }
 
-    /* New styles for bet-guess container */
-
     .bet-guess-container {
       display: flex;
       flex-direction: row;
@@ -302,7 +300,6 @@
         padding: 0.65rem;
       }
 
-      /* Keep horizontal on tablets, can wrap if needed */
       .bet-guess-container {
         flex-wrap: nowrap;
       }
@@ -338,7 +335,6 @@
         min-width: 100px;
       }
 
-      /* On small phones allow wrapping for better fit */
       .bet-guess-container {
         flex-wrap: wrap;
         gap: 0.75rem;
