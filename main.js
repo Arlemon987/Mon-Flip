@@ -18,7 +18,7 @@ let signer;
 let coinFlipContract;
 let currentAccount = null;
 
-// This flag blocks auto connect after a manual disconnect
+// Flag to block auto reconnect after disconnect
 let userDisconnected = false;
 
 function showMessage(message, type = 'info') {
@@ -57,7 +57,7 @@ async function connectWallet() {
     }
 
     try {
-        // Request accounts - supports MetaMask or other wallets injecting ethereum
+        // Always prompts wallet permission popup
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         if (!accounts || accounts.length === 0) throw new Error("No accounts found");
 
@@ -69,11 +69,9 @@ async function connectWallet() {
         showMessage(`Wallet connected: ${currentAccount}`, 'success');
         await updateUI();
 
-        // Show Disconnect button, hide Connect
         disconnectWalletButton.classList.remove('hidden');
         connectWalletButton.classList.add('hidden');
 
-        // Add event listeners
         window.ethereum.on('accountsChanged', handleAccountsChanged);
         window.ethereum.on('chainChanged', handleChainChanged);
 
@@ -88,8 +86,8 @@ async function connectWallet() {
     }
 }
 
+// Disabled auto connect on page load to require manual connect every time
 async function autoConnectWallet() {
-    // If user manually disconnected previously, don't auto connect again
     if (userDisconnected) {
         disconnectWalletButton.classList.add('hidden');
         connectWalletButton.classList.remove('hidden');
@@ -102,7 +100,6 @@ async function autoConnectWallet() {
         provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.listAccounts();
         if (accounts.length === 0) {
-            // No wallet connected
             disconnectWalletButton.classList.add('hidden');
             connectWalletButton.classList.remove('hidden');
             return updateUI();
@@ -175,7 +172,6 @@ function handleFlipResult(player, betAmount, guessedHeads, isHeads, won) {
 function disconnectWallet() {
     currentAccount = null;
 
-    // Remove contract and signer references
     if (coinFlipContract) {
         coinFlipContract.removeAllListeners("FlipResult");
         coinFlipContract = null;
@@ -183,7 +179,6 @@ function disconnectWallet() {
     signer = null;
     provider = null;
 
-    // Update UI
     connectedAccountDisplay.textContent = "Not Connected";
     walletBalanceDisplay.textContent = "0.00 MON";
     flipButton.disabled = true;
@@ -193,17 +188,15 @@ function disconnectWallet() {
 
     showMessage("Wallet disconnected.", "info");
 
-    // Show Connect button, hide Disconnect
     disconnectWalletButton.classList.add('hidden');
     connectWalletButton.classList.remove('hidden');
 
-    // Remove ethereum event listeners
     if (window.ethereum && window.ethereum.removeListener) {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         window.ethereum.removeListener('chainChanged', handleChainChanged);
     }
 
-    // Set flag to prevent auto-connect on reload or future loads
+    // Set flag so no auto connect occurs after disconnect
     userDisconnected = true;
 }
 
@@ -254,9 +247,8 @@ connectWalletButton.addEventListener('click', connectWallet);
 disconnectWalletButton.addEventListener('click', disconnectWallet);
 flipButton.addEventListener('click', flipCoin);
 
-// ** DO NOT auto connect wallet on page load **
-// Comment out or remove this line:
+// NO auto connect on load, so commented out
 // window.addEventListener('load', autoConnectWallet);
 
-// You can optionally call updateUI once on load to show default UI state:
+// Just update UI on load
 window.addEventListener('load', () => updateUI());
