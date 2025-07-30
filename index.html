@@ -255,6 +255,26 @@
       white-space: nowrap;
     }
 
+    /* New styles for bet-guess container */
+
+    .bet-guess-container {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: center;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .bet-guess-item {
+      flex: 1 1 50%;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+    }
+
     @media (max-width: 768px) {
       .game-container {
         max-width: 95vw;
@@ -280,6 +300,11 @@
       .input-field {
         font-size: 1rem;
         padding: 0.65rem;
+      }
+
+      /* Keep horizontal on tablets, can wrap if needed */
+      .bet-guess-container {
+        flex-wrap: nowrap;
       }
     }
 
@@ -311,6 +336,16 @@
 
       .wallet-buttons, .wallet-display {
         min-width: 100px;
+      }
+
+      /* On small phones allow wrapping for better fit */
+      .bet-guess-container {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .bet-guess-item {
+        flex: 1 1 100%;
       }
     }
   </style>
