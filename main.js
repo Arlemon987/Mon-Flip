@@ -21,7 +21,7 @@ let currentAccount = null;
 // Flag to prevent auto reconnect after manual disconnect
 let userDisconnected = false;
 
-const MONAD_TESTNET_CHAIN_ID = '0x27df'; // 10143 decimal in hex
+const MONAD_TESTNET_CHAIN_ID = '0x279f'; // 10143 decimal in hex
 
 const MONAD_TESTNET_PARAMS = {
   chainId: MONAD_TESTNET_CHAIN_ID,
