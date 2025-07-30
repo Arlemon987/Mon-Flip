@@ -23,13 +23,14 @@
       padding: 1rem;
       overflow-x: hidden;
     }
+
     .game-container {
       background-color: #2d3748;
       border-radius: 1.5rem;
       box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
       padding: 2.5rem;
       width: 100%;
-      max-width: 400px;
+      max-width: 720px;
       text-align: center;
       border: 1px solid #4a5568;
       box-sizing: border-box;
@@ -37,6 +38,7 @@
       flex-direction: column;
       gap: 1rem;
     }
+
     .coin-container {
       width: 100px;
       height: 100px;
@@ -44,6 +46,7 @@
       perspective: 1000px;
       flex-shrink: 0;
     }
+
     .coin {
       width: 100%;
       height: 100%;
@@ -52,15 +55,19 @@
       border-radius: 50%;
       position: relative;
     }
+
     .coin.flipping {
       animation: spin 1s infinite linear;
     }
+
     .coin.heads {
       transform: rotateY(0deg);
     }
+
     .coin.tails {
       transform: rotateY(180deg);
     }
+
     .coin-face {
       position: absolute;
       width: 100%;
@@ -76,18 +83,22 @@
       box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
       border: 5px solid #ffd700;
     }
+
     .coin-face.front {
       background-color: #ffcc00;
       transform: rotateY(0deg);
     }
+
     .coin-face.back {
       background-color: #c0c0c0;
       transform: rotateY(180deg);
     }
+
     @keyframes spin {
       from { transform: rotateY(0deg); }
       to { transform: rotateY(360deg); }
     }
+
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
@@ -101,62 +112,23 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     .btn-primary {
       background: linear-gradient(145deg, #667eea, #764ba2);
       color: #fff;
     }
+
     .btn-primary:hover {
       background: linear-gradient(145deg, #764ba2, #667eea);
       transform: translateY(-2px);
       box-shadow: 0 6px 8px -2px rgba(0,0,0,0.15), 0 3px 5px -1px rgba(0,0,0,0.08);
     }
+
     .btn-primary:active {
       transform: translateY(0);
       box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
     }
-    .input-field {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid #4a5568;
-      background-color: #2d3748;
-      color: #e2e8f0;
-      margin-bottom: 1rem;
-      box-sizing: border-box;
-      font-size: 1rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .input-field:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102,126,234,0.5);
-    }
-    .message-box {
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin-top: 1.5rem;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-      word-wrap: break-word;
-    }
-    .message-box.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .message-box.success {
-      background-color: #2f855a;
-      color: #fff;
-    }
-    .message-box.error {
-      background-color: #c53030;
-      color: #fff;
-    }
-    .message-box.info {
-      background-color: #3182ce;
-      color: #fff;
-    }
+
     .btn-disconnect {
       background: linear-gradient(145deg, #e53e3e, #9b2c2c);
       color: #fff;
@@ -171,50 +143,97 @@
       box-sizing: border-box;
       user-select: none;
     }
+
     .btn-disconnect:hover {
       background: linear-gradient(145deg, #9b2c2c, #e53e3e);
       transform: translateY(-2px);
       box-shadow: 0 6px 8px -2px rgba(0,0,0,0.15), 0 3px 5px -1px rgba(0,0,0,0.08);
     }
+
     .btn-disconnect:active {
       transform: translateY(0);
       box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
     }
 
-    /* NEW: Flex container for wallet buttons + account + balance */
+    .input-field {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid #4a5568;
+      background-color: #2d3748;
+      color: #e2e8f0;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.5);
+    }
+
+    .message-box {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-top: 1.5rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+      word-wrap: break-word;
+    }
+
+    .message-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message-box.success {
+      background-color: #2f855a;
+      color: #fff;
+    }
+
+    .message-box.error {
+      background-color: #c53030;
+      color: #fff;
+    }
+
+    .message-box.info {
+      background-color: #3182ce;
+      color: #fff;
+    }
+
     .wallet-info-container {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      flex-wrap: nowrap;
     }
-    .wallet-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-shrink: 0;
-      min-width: 160px;
+
+    .wallet-buttons, .wallet-display {
+      flex: 1;
     }
+
     .wallet-display {
       background-color: #4a5568;
       border-radius: 0.75rem;
       padding: 0.75rem 1rem;
-      min-width: 140px;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       word-wrap: break-word;
     }
 
-    /* NEW: Flex container for bet + guess */
     .bet-guess-container {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
+
     .bet-guess-item {
       flex-grow: 1;
       min-width: 140px;
@@ -224,48 +243,58 @@
 
     @media (max-width: 768px) {
       .game-container {
-        max-width: 90vw;
+        max-width: 95vw;
         padding: 2rem 1.5rem;
       }
+
+      .wallet-info-container {
+        flex-wrap: wrap;
+      }
+
       .coin-container {
         width: 90px;
         height: 90px;
         margin: 1.5rem auto;
       }
+
       .coin-face {
         font-size: 2.5rem;
         border-width: 4px;
       }
+
       .btn {
         font-size: 1rem;
         padding: 0.65rem 1.25rem;
       }
+
       .input-field {
         font-size: 1rem;
         padding: 0.65rem;
       }
     }
+
     @media (max-width: 480px) {
-      .game-container {
-        padding: 1.5rem 1rem;
-      }
       .coin-container {
         width: 80px;
         height: 80px;
         margin: 1rem auto;
       }
+
       .coin-face {
         font-size: 2rem;
         border-width: 3px;
       }
+
       .btn {
         font-size: 0.9rem;
         padding: 0.6rem 1rem;
       }
+
       .input-field {
         font-size: 0.9rem;
         padding: 0.6rem;
       }
+
       h1.text-3xl {
         font-size: 1.75rem;
       }
@@ -273,7 +302,6 @@
   </style>
 </head>
 <body>
-
   <div class="game-container">
     <h1 class="text-3xl font-bold mb-6 text-purple-300">MonFlip</h1>
 
@@ -282,12 +310,10 @@
         <button id="connect-wallet-button" class="btn btn-primary">Connect Wallet</button>
         <button id="disconnect-wallet-button" class="btn btn-disconnect hidden">Disconnect Wallet</button>
       </div>
-
       <div class="wallet-display">
         <span class="text-lg font-semibold">Connected Account:</span>
         <span id="connected-account" class="text-sm font-bold text-yellow-400 break-all">Not Connected</span>
       </div>
-
       <div class="wallet-display">
         <span class="text-lg font-semibold">Wallet Balance:</span>
         <span id="wallet-balance" class="text-xl font-bold text-yellow-400">0.00 MON</span>
