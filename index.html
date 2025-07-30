@@ -32,11 +32,8 @@
       background-image: url('https://docs.monad.xyz/img/monad_logo.png');
       background-repeat: no-repeat;
       background-position: center center;
-      background-size: 150px 150px;
-      opacity: 1;
-      /* Overlay with a dark semi-transparent layer for better contrast */
-      /* We'll do that with a pseudo-element */
-      
+      background-size: cover;  /* FULL container coverage */
+
       border-radius: 0;
       box-shadow: none;
       padding: 2rem;
@@ -56,7 +53,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background-color: rgba(26, 32, 44, 0.85); /* same as body bg but translucent */
+      background-color: rgba(26, 32, 44, 0.85);
       z-index: 0;
       pointer-events: none;
     }
@@ -78,6 +75,8 @@
       user-select: none;
       z-index: 10;
     }
+
+    /* ... rest CSS unchanged (coin-container, buttons, inputs, etc.) ... */
 
     .coin-container {
       width: 100px;
