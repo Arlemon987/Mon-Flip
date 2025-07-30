@@ -205,18 +205,22 @@
       color: #fff;
     }
 
-    /* UPDATED: Shrink wallet info container size */
+    /* UPDATED: Wallet info container forced in one horizontal line with horizontal scroll on small devices */
     .wallet-info-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.5rem;
-      flex-wrap: nowrap;
+      flex-wrap: nowrap;        /* Prevent wrapping */
       padding: 0.25rem 0;
+      overflow-x: auto;         /* Enable horizontal scroll if needed */
+      -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
     }
 
     .wallet-buttons, .wallet-display {
-      flex: 0 1 28%;
+      flex: 0 1 auto;           /* Allow shrinking but keep content size */
+      min-width: 120px;         /* Prevent them from getting too narrow */
+      white-space: nowrap;      /* Prevent text wrap inside */
     }
 
     .wallet-display {
@@ -226,7 +230,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      word-wrap: break-word;
+      word-wrap: normal;        /* no wrap */
     }
 
     .wallet-display span.text-lg.font-semibold {
@@ -236,11 +240,13 @@
     .wallet-display span#connected-account,
     .wallet-display span#wallet-balance {
       font-size: 0.9rem;
+      white-space: nowrap;      /* Prevent breaking addresses or balances */
     }
 
     .wallet-buttons button {
       padding: 0.5rem 1rem;
       font-size: 0.9rem;
+      white-space: nowrap;
     }
 
     .bet-guess-container {
@@ -263,13 +269,9 @@
         padding: 2rem 1.5rem;
       }
 
+      /* Remove wallet-info-container wrap on smaller screens */
       .wallet-info-container {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-
-      .wallet-display, .wallet-buttons {
-        flex: 1 1 100%;
+        /* no flex-wrap to keep in one line */
       }
 
       .coin-container {
