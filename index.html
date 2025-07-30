@@ -180,6 +180,48 @@
       transform: translateY(0);
       box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
     }
+
+    /* NEW: Flex container for wallet buttons + account + balance */
+    .wallet-info-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .wallet-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      min-width: 160px;
+    }
+    .wallet-display {
+      background-color: #4a5568;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      min-width: 140px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      word-wrap: break-word;
+    }
+
+    /* NEW: Flex container for bet + guess */
+    .bet-guess-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .bet-guess-item {
+      flex-grow: 1;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+    }
+
     @media (max-width: 768px) {
       .game-container {
         max-width: 90vw;
@@ -235,17 +277,21 @@
   <div class="game-container">
     <h1 class="text-3xl font-bold mb-6 text-purple-300">MonFlip</h1>
 
-    <button id="connect-wallet-button" class="btn btn-primary mb-4">Connect Wallet</button>
-    <button id="disconnect-wallet-button" class="btn btn-disconnect mb-4 hidden">Disconnect Wallet</button>
+    <div class="wallet-info-container">
+      <div class="wallet-buttons">
+        <button id="connect-wallet-button" class="btn btn-primary">Connect Wallet</button>
+        <button id="disconnect-wallet-button" class="btn btn-disconnect hidden">Disconnect Wallet</button>
+      </div>
 
-    <div class="flex justify-between items-center mb-6 p-3 bg-gray-700 rounded-lg">
-      <span class="text-lg font-semibold">Connected Account:</span>
-      <span id="connected-account" class="text-sm font-bold text-yellow-400 break-all">Not Connected</span>
-    </div>
+      <div class="wallet-display">
+        <span class="text-lg font-semibold">Connected Account:</span>
+        <span id="connected-account" class="text-sm font-bold text-yellow-400 break-all">Not Connected</span>
+      </div>
 
-    <div class="flex justify-between items-center mb-6 p-3 bg-gray-700 rounded-lg">
-      <span class="text-lg font-semibold">Wallet Balance:</span>
-      <span id="wallet-balance" class="text-xl font-bold text-yellow-400">0.00 MON</span>
+      <div class="wallet-display">
+        <span class="text-lg font-semibold">Wallet Balance:</span>
+        <span id="wallet-balance" class="text-xl font-bold text-yellow-400">0.00 MON</span>
+      </div>
     </div>
 
     <div class="coin-container">
@@ -255,17 +301,19 @@
       </div>
     </div>
 
-    <div class="mb-4 w-full">
-      <label for="bet-amount" class="block text-left text-sm font-medium mb-2">Bet Amount (MON):</label>
-      <input type="number" id="bet-amount" class="input-field" value="0.01" min="0.001" step="0.001" />
-    </div>
+    <div class="bet-guess-container">
+      <div class="bet-guess-item">
+        <label for="bet-amount" class="block text-left text-sm font-medium mb-2">Bet Amount (MON):</label>
+        <input type="number" id="bet-amount" class="input-field" value="0.01" min="0.001" step="0.001" />
+      </div>
 
-    <div class="mb-6 w-full">
-      <label for="guess" class="block text-left text-sm font-medium mb-2">Your Guess:</label>
-      <select id="guess" class="input-field appearance-none">
-        <option value="heads">Heads</option>
-        <option value="tails">Tails</option>
-      </select>
+      <div class="bet-guess-item">
+        <label for="guess" class="block text-left text-sm font-medium mb-2">Your Guess:</label>
+        <select id="guess" class="input-field appearance-none">
+          <option value="heads">Heads</option>
+          <option value="tails">Tails</option>
+        </select>
+      </div>
     </div>
 
     <button id="flip-button" class="btn btn-primary" disabled>Flip Coin</button>
