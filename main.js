@@ -18,6 +18,9 @@ let signer;
 let coinFlipContract;
 let currentAccount = null;
 
+// This flag blocks auto connect after a manual disconnect
+let userDisconnected = false;
+
 function showMessage(message, type = 'info') {
     console.log(`[Message - ${type}]: ${message}`);
     messageBox.textContent = message;
@@ -76,6 +79,9 @@ async function connectWallet() {
 
         coinFlipContract.on("FlipResult", handleFlipResult);
 
+        // Reset flag on manual connect
+        userDisconnected = false;
+
     } catch (error) {
         console.error("Wallet connection failed:", error);
         showMessage("Wallet connection failed or denied.", 'error');
@@ -83,6 +89,13 @@ async function connectWallet() {
 }
 
 async function autoConnectWallet() {
+    // If user manually disconnected previously, don't auto connect again
+    if (userDisconnected) {
+        disconnectWalletButton.classList.add('hidden');
+        connectWalletButton.classList.remove('hidden');
+        return updateUI();
+    }
+
     if (!window.ethereum) return;
 
     try {
@@ -189,6 +202,9 @@ function disconnectWallet() {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         window.ethereum.removeListener('chainChanged', handleChainChanged);
     }
+
+    // Set flag to prevent auto-connect on reload or future loads
+    userDisconnected = true;
 }
 
 async function flipCoin() {
@@ -238,4 +254,9 @@ connectWalletButton.addEventListener('click', connectWallet);
 disconnectWalletButton.addEventListener('click', disconnectWallet);
 flipButton.addEventListener('click', flipCoin);
 
-window.addEventListener('load', autoConnectWallet);
+// ** DO NOT auto connect wallet on page load **
+// Comment out or remove this line:
+// window.addEventListener('load', autoConnectWallet);
+
+// You can optionally call updateUI once on load to show default UI state:
+window.addEventListener('load', () => updateUI());
