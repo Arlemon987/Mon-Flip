@@ -1,422 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-47WPPN9SKK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-47WPPN9SKK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-47WPPN9SKK');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MonFlip</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Ethers.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d;
+            background-image: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-  gtag('config', 'G-47WPPN9SKK');
-</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MonFlip</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+        .monad-logo {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            height: 40px;
+            width: auto;
+            z-index: 20;
+        }
 
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <!-- Ethers.js -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #1a202c;
-      color: #e2e8f0;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      width: 100vw;
-      height: 100vh;
-      display: block;
-    }
+        /* Coin animation CSS */
+        .coin-container {
+            width: 120px;
+            height: 120px;
+            margin: 2rem auto;
+            perspective: 1000px;
+            flex-shrink: 0;
+        }
 
-    .game-container {
-      position: relative; /* For absolute logo */
-      background-color: #2d3748;
+        .coin {
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border-radius: 50%;
+            position: relative;
+        }
 
-      /* Monad logo background */
-      background-image: url('https://docs.monad.xyz/img/monad_logo.png');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: cover;  /* FULL container coverage */
+        .coin.flipping {
+            animation: spin 1s infinite linear;
+        }
 
-      border-radius: 0;
-      box-shadow: none;
-      padding: 2rem;
-      width: 100vw;
-      height: 100vh;
-      text-align: center;
-      border: none;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      gap: 0.95rem; /* approx 5% reduced gap */
-      overflow-y: auto;
-      z-index: 0;
-    }
-    /* Dark overlay for background image */
-    .game-container::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-color: rgba(26, 32, 44, 0.85);
-      z-index: 0;
-      pointer-events: none;
-    }
+        .coin.heads {
+            transform: rotateY(0deg);
+        }
 
-    /* Make sure content is above overlay */
-    .game-container > * {
-      position: relative;
-      z-index: 1;
-    }
+        .coin.tails {
+            transform: rotateY(180deg);
+        }
 
-    /* Monad logo top-left corner */
-    .monad-logo {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      height: 40px;
-      width: auto;
-      cursor: pointer;
-      user-select: none;
-      z-index: 10;
-    }
+        .coin-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            border: 5px solid #a78bfa;
+        }
 
-    /* ... rest CSS unchanged (coin-container, buttons, inputs, etc.) ... */
+        .coin-face.front {
+            background-color: #7c3aed;
+            transform: rotateY(0deg);
+        }
 
-    .coin-container {
-      width: 100px;
-      height: 100px;
-      margin: 2rem auto;
-      perspective: 1000px;
-      flex-shrink: 0;
-    }
+        .coin-face.back {
+            background-color: #6d28d9;
+            transform: rotateY(180deg);
+        }
 
-    .coin {
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-      border-radius: 50%;
-      position: relative;
-    }
+        @keyframes spin {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
 
-    .coin.flipping {
-      animation: spin 1s infinite linear;
-    }
+        /* Custom styles for buttons, inputs, etc. with Tailwind */
+        .btn-primary {
+            background-image: linear-gradient(to right, #8b5cf6, #c084fc);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background-image: linear-gradient(to right, #c084fc, #8b5cf6);
+            box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.15), 0 3px 5px -1px rgba(0, 0, 0, 0.08);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+        }
 
-    .coin.heads {
-      transform: rotateY(0deg);
-    }
+        .btn-disconnect {
+            background: linear-gradient(145deg, #ef4444, #b91c1c);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-disconnect:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(145deg, #b91c1c, #ef4444);
+            box-shadow: 0 6px 8px -2px rgba(0,0,0,0.15), 0 3px 5px -1px rgba(0,0,0,0.08);
+        }
+        .btn-disconnect:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
+        }
 
-    .coin.tails {
-      transform: rotateY(180deg);
-    }
-
-    .coin-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 3rem;
-      font-weight: bold;
-      color: #fff;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-      border: 5px solid #9f7aea; /* purple border */
-    }
-
-    .coin-face.front {
-      background-color: #7c3aed; /* purple front */
-      transform: rotateY(0deg);
-    }
-
-    .coin-face.back {
-      background-color: #a78bfa; /* lighter purple back */
-      transform: rotateY(180deg);
-    }
-
-    @keyframes spin {
-      from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-      border: none;
-      user-select: none;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .btn-primary {
-      background: linear-gradient(145deg, #667eea, #764ba2);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(145deg, #764ba2, #667eea);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px -2px rgba(0,0,0,0.15), 0 3px 5px -1px rgba(0,0,0,0.08);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
-    }
-
-    .btn-disconnect {
-      background: linear-gradient(145deg, #e53e3e, #9b2c2c);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem; /* smaller padding */
-      font-weight: 600;
-      font-size: 0.85rem; /* smaller font size */
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-      transition: all 0.2s ease-in-out;
-      width: 100%;
-      box-sizing: border-box;
-      user-select: none;
-    }
-
-    .btn-disconnect:hover {
-      background: linear-gradient(145deg, #9b2c2c, #e53e3e);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px -2px rgba(0,0,0,0.15), 0 3px 5px -1px rgba(0,0,0,0.08);
-    }
-
-    .btn-disconnect:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px -1px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06);
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid #4a5568;
-      background-color: #2d3748;
-      color: #e2e8f0;
-      margin-bottom: 1rem;
-      box-sizing: border-box;
-      font-size: 1rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .input-field:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102,126,234,0.5);
-    }
-
-    .message-box {
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin-top: 1.5rem;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-      word-wrap: break-word;
-    }
-
-    .message-box.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .message-box.success {
-      background-color: #2f855a;
-      color: #fff;
-    }
-
-    .message-box.error {
-      background-color: #c53030;
-      color: #fff;
-    }
-
-    .message-box.info {
-      background-color: #3182ce;
-      color: #fff;
-    }
-
-    .wallet-info-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.95rem; /* reduced gap */
-      flex-wrap: nowrap;
-      font-size: 0.85rem;
-    }
-
-    .wallet-buttons, .wallet-display {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .wallet-display {
-      background-color: #4a5568;
-      border-radius: 0.75rem;
-      padding: 0.5rem 0.75rem;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      word-wrap: break-word;
-      font-size: 0.85rem;
-    }
-
-    .bet-guess-container {
-      display: flex;
-      flex-direction: row;
-      gap: 0.95rem; /* reduced gap */
-      justify-content: center;
-      align-items: flex-start;
-      margin-bottom: 1.425rem; /* reduced approx 5% */
-      width: 100%;
-      box-sizing: border-box;
-      flex-wrap: nowrap;
-    }
-
-    .bet-guess-item {
-      flex: 1 1 50%;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    @media (max-width: 768px) {
-      .game-container {
-        max-width: 95vw;
-        padding: 2rem 1.5rem;
-      }
-
-      .wallet-info-container {
-        font-size: 0.75rem;
-      }
-
-      .coin-container {
-        width: 90px;
-        height: 90px;
-        margin: 1.5rem auto;
-      }
-
-      .coin-face {
-        font-size: 2.5rem;
-        border-width: 4px;
-      }
-
-      .btn {
-        font-size: 1rem;
-        padding: 0.65rem 1.25rem;
-      }
-
-      .input-field {
-        font-size: 1rem;
-        padding: 0.65rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .coin-container {
-        width: 80px;
-        height: 80px;
-        margin: 1rem auto;
-      }
-
-      .coin-face {
-        font-size: 2rem;
-        border-width: 3px;
-      }
-
-      .btn {
-        font-size: 0.9rem;
-        padding: 0.6rem 1rem;
-      }
-
-      .input-field {
-        font-size: 0.9rem;
-        padding: 0.6rem;
-      }
-
-      h1.text-3xl {
-        font-size: 1.75rem;
-      }
-    }
-  </style>
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <div class="game-container">
     <!-- Monad Logo at top-left corner -->
-    <a href="https://monad.xyz" target="_blank" rel="noopener noreferrer">
-      <img src="https://docs.monad.xyz/img/monad_logo.png" alt="Monad Logo" class="monad-logo" />
+    <a href="https://monad.xyz" target="_blank" rel="noopener noreferrer" class="monad-logo">
+        <img src="https://docs.monad.xyz/img/monad_logo.png" alt="Monad Logo" class="h-10 w-auto" />
     </a>
+    
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4 my-8 relative border border-gray-700">
+        <h1 class="text-3xl font-bold text-center mb-6 text-purple-300">MonFlip</h1>
 
-    <h1 class="text-3xl font-bold mb-5 text-purple-300">MonFlip</h1>
+        <!-- Wallet Info & Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
+            <button id="connect-wallet-button" class="flex-1 w-full sm:w-auto px-4 py-2 rounded-xl text-white font-semibold btn-primary">Connect Wallet</button>
+            <button id="disconnect-wallet-button" class="flex-1 w-full sm:w-auto px-4 py-2 rounded-xl text-white font-semibold hidden btn-disconnect">Disconnect Wallet</button>
+            <div class="bg-gray-700 p-2 rounded-xl flex-1 w-full sm:w-auto text-sm truncate">
+                <span id="connected-account" class="block text-yellow-400 font-medium">Not Connected</span>
+            </div>
+            <div class="bg-gray-700 p-2 rounded-xl flex-1 w-full sm:w-auto text-sm text-center">
+                <span id="wallet-balance" class="block text-yellow-400 font-bold">0.00 MON</span>
+            </div>
+        </div>
 
-    <div class="wallet-info-container">
-      <div class="wallet-buttons">
-        <button id="connect-wallet-button" class="btn btn-primary">Connect Wallet</button>
-        <button id="disconnect-wallet-button" class="btn btn-disconnect hidden">Disconnect Wallet</button>
-      </div>
-      <div class="wallet-display">
-        <span id="connected-account" class="text-sm font-bold text-yellow-400 break-all">Not Connected</span>
-      </div>
-      <div class="wallet-display">
-        <span id="wallet-balance" class="text-xl font-bold text-yellow-400">0.00 MON</span>
-      </div>
+        <div class="coin-container">
+            <div id="coin" class="coin">
+                <div class="coin-face front">H</div>
+                <div class="coin-face back">T</div>
+            </div>
+        </div>
+
+        <!-- Bet & Guess Controls -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <div class="flex-1">
+                <label for="bet-amount" class="block text-sm font-medium mb-1">Bet Amount (MON):</label>
+                <input type="number" id="bet-amount" class="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all" value="0.01" min="0.001" step="0.001" />
+            </div>
+            <div class="flex-1">
+                <label for="guess" class="block text-sm font-medium mb-1">Your Guess:</label>
+                <select id="guess" class="w-full px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all appearance-none">
+                    <option value="heads">Heads</option>
+                    <option value="tails">Tails</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="flip-button" class="w-full px-4 py-3 rounded-xl text-white font-bold text-lg btn-primary" disabled>Flip Coin</button>
+
+        <div id="message-box" class="mt-4 px-4 py-3 rounded-lg text-white font-semibold transition-all duration-300 opacity-0 transform translate-y-2"></div>
+        <div id="result-display" class="text-2xl font-bold text-center mt-4 hidden text-yellow-400"></div>
+
+        <!-- Developer Info -->
+        <a href="https://twitter.com/lemonar777" target="_blank" class="block text-center mt-6 text-purple-300 text-xs hover:underline flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 0 0 1.88-2.38 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 11.1 9.03 12.14 12.14 0 0 1 3 5.3a4.28 4.28 0 0 0 1.32 5.71A4.25 4.25 0 0 1 2.8 10v.05a4.28 4.28 0 0 0 3.43 4.2 4.28 4.28 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.97A8.6 8.6 0 0 1 2 19.54a12.14 12.14 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2v-.56A8.6 8.6 0 0 0 24 5.5a8.48 8.48 0 0 1-2.54.7z"/>
+            </svg>
+            <span>Developed by Asiqur007 ///\\\ Follow the Developer @lemonar777</span>
+        </a>
     </div>
 
-    <div class="coin-container">
-      <div id="coin" class="coin">
-        <div class="coin-face front">H</div>
-        <div class="coin-face back">T</div>
-      </div>
-    </div>
-
-    <div class="bet-guess-container">
-      <div class="bet-guess-item">
-        <label for="bet-amount" class="block text-left text-sm font-medium mb-2">Bet Amount (MON):</label>
-        <input type="number" id="bet-amount" class="input-field" value="0.01" min="0.001" step="0.001" />
-      </div>
-
-      <div class="bet-guess-item">
-        <label for="guess" class="block text-left text-sm font-medium mb-2">Your Guess:</label>
-        <select id="guess" class="input-field appearance-none">
-          <option value="heads">Heads</option>
-          <option value="tails">Tails</option>
-        </select>
-      </div>
-    </div>
-
-    <button id="flip-button" class="btn btn-primary" disabled>Flip Coin</button>
-
-    <div id="message-box" class="message-box"></div>
-
-    <div id="result-display" class="text-2xl font-bold mt-1 text-center hidden"></div>
-
-    <a href="https://twitter.com/lemonar777" target="_blank" class="inline-flex items-center gap-2 text-purple-300 text-[12px] font-bold mb-1 hover:underline">
-      <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 0 0 1.88-2.38 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 11.1 9.03 12.14 12.14 0 0 1 3 5.3a4.28 4.28 0 0 0 1.32 5.71A4.25 4.25 0 0 1 2.8 10v.05a4.28 4.28 0 0 0 3.43 4.2 4.28 4.28 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.97A8.6 8.6 0 0 1 2 19.54a12.14 12.14 0 0 0 6.56 1.92c7.88 0 12.2-6.53 12.2-12.2v-.56A8.6 8.6 0 0 0 24 5.5a8.48 8.48 0 0 1-2.54.7z"/>
-      </svg>
-      Developed by Asiqur007 ///\\\
-      Follow the Developer @lemonar777
-    </a>
-  </div>
-
-  <script type="module" src="main.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
