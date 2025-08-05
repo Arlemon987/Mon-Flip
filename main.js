@@ -13,6 +13,12 @@ const betAmountInput = document.getElementById('bet-amount');
 const guessSelect = document.getElementById('guess');
 const messageBox = document.getElementById('message-box');
 
+// Withdrawal related DOM elements
+const adminSection = document.getElementById('admin-section');
+const withdrawAmountInput = document.getElementById('withdraw-amount');
+const withdrawButton = document.getElementById('withdraw-button');
+const withdrawStatus = document.getElementById('withdraw-status');
+
 let provider;
 let signer;
 let coinFlipContract;
@@ -61,6 +67,20 @@ async function updateUI() {
     connectedAccountDisplay.textContent = "Not Connected";
     walletBalanceDisplay.textContent = "0.00 MON";
     flipButton.disabled = true;
+  }
+}
+
+async function checkIfOwner() {
+  try {
+    const ownerAddress = await coinFlipContract.owner();
+    if (currentAccount && currentAccount.toLowerCase() === ownerAddress.toLowerCase()) {
+      adminSection.classList.remove('hidden');
+    } else {
+      adminSection.classList.add('hidden');
+    }
+  } catch (error) {
+    console.error("Error fetching owner:", error);
+    adminSection.classList.add('hidden');
   }
 }
 
@@ -114,9 +134,6 @@ async function connectWallet() {
     if (!accounts || accounts.length === 0) throw new Error("No accounts found");
 
     currentAccount = accounts[0];
-
-    await checkIfOwner();
-
     provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
     coinFlipContract = new ethers.Contract(contractAddress, abi, signer);
@@ -134,6 +151,8 @@ async function connectWallet() {
 
     userDisconnected = false;
 
+    await checkIfOwner();
+
   } catch (error) {
     console.error("Wallet connection failed:", error);
     showMessage("Wallet connection failed or denied.", 'error');
@@ -147,6 +166,11 @@ function handleAccountsChanged(accounts) {
 
   if (!currentAccount) {
     disconnectWallet();
+  } else {
+    // When account changes, re-check if owner
+    if (coinFlipContract) {
+      checkIfOwner();
+    }
   }
 }
 
@@ -208,6 +232,10 @@ function disconnectWallet() {
     window.ethereum.removeListener('chainChanged', handleChainChanged);
   }
 
+  adminSection.classList.add('hidden');
+  withdrawStatus.textContent = '';
+  withdrawAmountInput.value = '';
+
   userDisconnected = true;
 }
 
@@ -251,10 +279,42 @@ async function flipCoin() {
     coin.classList.remove('flipping');
     updateUI();
   }
-
-  
-  
 }
+
+// Withdrawal button event
+withdrawButton.addEventListener('click', async () => {
+  if (!coinFlipContract || !signer) {
+    showMessage('Wallet not connected or contract not initialized.', 'error');
+    return;
+  }
+
+  const amountEth = parseFloat(withdrawAmountInput.value);
+  if (isNaN(amountEth) || amountEth <= 0) {
+    showMessage('Please enter a valid withdrawal amount.', 'error');
+    return;
+  }
+
+  const amountWei = ethers.utils.parseEther(amountEth.toString());
+
+  withdrawStatus.textContent = '';
+  withdrawButton.disabled = true;
+  showMessage('Sending withdrawal transaction...', 'info');
+
+  try {
+    const tx = await coinFlipContract.withdraw(amountWei);
+    showMessage(`Withdrawal tx sent! Waiting for confirmation... (${tx.hash.slice(0,10)}...)`, 'info');
+    await tx.wait();
+    showMessage('Withdrawal successful!', 'success');
+    withdrawStatus.textContent = `Successfully withdrew ${amountEth.toFixed(4)} MON.`;
+    withdrawAmountInput.value = '';
+    await updateUI();
+  } catch (error) {
+    console.error('Withdrawal failed:', error);
+    showMessage(`Withdrawal failed: ${error.message || error}`, 'error');
+  } finally {
+    withdrawButton.disabled = false;
+  }
+});
 
 // Event listeners
 connectWalletButton.addEventListener('click', connectWallet);
@@ -263,21 +323,3 @@ flipButton.addEventListener('click', flipCoin);
 
 // No auto connect on load
 window.addEventListener('load', () => updateUI());
-
-
-
-
-
-
-async function checkIfOwner() {
-  try {
-    const contractOwner = await coinFlipContract.owner();
-    if (currentAccount.toLowerCase() === contractOwner.toLowerCase()) {
-      document.getElementById("admin-section").classList.remove("hidden");
-      showMessage("Admin access granted", "success");
-    }
-  } catch (err) {
-    console.error("Owner check failed:", err);
-  }
-}
-
