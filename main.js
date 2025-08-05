@@ -260,3 +260,44 @@ flipButton.addEventListener('click', flipCoin);
 
 // No auto connect on load
 window.addEventListener('load', () => updateUI());
+
+
+
+
+
+
+const withdrawAmountInput = document.getElementById("withdraw-amount");
+const withdrawButton = document.getElementById("withdraw-button");
+const withdrawStatus = document.getElementById("withdraw-status");
+
+withdrawButton.addEventListener("click", async () => {
+  if (!coinFlipContract || !signer || !currentAccount) {
+    withdrawStatus.textContent = "Wallet not connected.";
+    return;
+  }
+
+  const amountEth = parseFloat(withdrawAmountInput.value);
+  if (isNaN(amountEth) || amountEth <= 0) {
+    withdrawStatus.textContent = "Enter a valid withdrawal amount.";
+    return;
+  }
+
+  const amountWei = ethers.utils.parseEther(amountEth.toString());
+
+  try {
+    withdrawStatus.textContent = "Sending withdrawal transaction...";
+    const tx = await coinFlipContract.withdraw(amountWei);
+    withdrawStatus.textContent = `Tx sent: ${tx.hash.slice(0, 10)}... waiting...`;
+
+    await tx.wait();
+
+    withdrawStatus.textContent = `✅ Withdrawn ${amountEth} MON successfully!`;
+    showMessage(`Withdrawn ${amountEth} MON`, 'success');
+    await updateUI();
+  } catch (err) {
+    console.error("Withdrawal failed:", err);
+    withdrawStatus.textContent = `❌ Withdrawal failed: ${err.reason || err.message}`;
+    showMessage("Withdrawal failed", 'error');
+  }
+});
+
