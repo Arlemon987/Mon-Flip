@@ -4,9 +4,7 @@ const contractAddress = "0xBAA21Eb0bB1D9325A2A4046EbBb015eb45508B3f";
 
 const connectWalletButton = document.getElementById('connect-wallet-button');
 const disconnectWalletButton = document.getElementById('disconnect-wallet-button');
-
-
-
+const connectedAccountDisplay = document.getElementById('connected-account');
 const walletBalanceDisplay = document.getElementById('wallet-balance');
 const coin = document.getElementById('coin');
 const flipButton = document.getElementById('flip-button');
