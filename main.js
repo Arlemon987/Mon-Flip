@@ -249,22 +249,6 @@ async function flipCoin() {
     updateUI();
   }
 
-
-
-  async function withdrawFromContract(amountInEth) {
-    try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
-        const tx = await contract.withdraw(ethers.utils.parseEther(amountInEth));
-        await tx.wait();
-        alert("Withdrawal successful");
-    } catch (err) {
-        console.error("Withdrawal error:", err);
-        alert("Withdrawal failed");
-    }
-}
-
   
   
 }
