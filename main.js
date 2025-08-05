@@ -152,11 +152,7 @@ async function connectWallet() {
     await updateUI();
 
     disconnectWalletButton.classList.remove('hidden');
-    
-    // Hide Connect Wallet button after 2 seconds delay
-    setTimeout(() => {
-      connectWalletButton.classList.add('hidden');
-    }, 2000);
+    connectWalletButton.classList.add('hidden');
 
     window.ethereum.on('accountsChanged', handleAccountsChanged);
     window.ethereum.on('chainChanged', handleChainChanged);
@@ -169,6 +165,15 @@ async function connectWallet() {
   }
 }
 
+function handleAccountsChanged(accounts) {
+  currentAccount = accounts[0] || null;
+  showMessage(`Account changed to: ${currentAccount || 'None'}`, 'info');
+  updateUI();
+
+  if (!currentAccount) {
+    disconnectWallet();
+  }
+}
 
 function handleChainChanged() {
   window.location.reload();
